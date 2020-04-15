@@ -9,7 +9,7 @@ from .openwhisk import build_response, not_acceptable
 from .process import execute
 from .mime_types import mime_extention
 
-pandoc = Blueprint("openwhisk")
+pandoc = Blueprint("pandoc")
 
 
 @pandoc.post("/run")
