@@ -1,7 +1,7 @@
 import base64
 from shlex import quote
 
-from sanic import Sanic, response
+from sanic import Blueprint, response
 from sanic.log import logger
 from sanic.response import text
 
@@ -9,10 +9,10 @@ from .openwhisk import build_response, not_acceptable
 from .process import execute
 from .mime_types import mime_extention
 
-app = Sanic(name="render")
+pandoc = Blueprint("openwhisk")
 
 
-@app.post("/run")
+@pandoc.post("/run")
 async def run(request):
     payload = request.json
     headers = payload.get("__ow_headers", {})
@@ -57,6 +57,6 @@ async def run(request):
         )
 
 
-@app.post("/init")
+@pandoc.post("/init")
 async def init(request):
     return text("OK")
