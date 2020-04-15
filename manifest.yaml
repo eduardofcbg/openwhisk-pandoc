@@ -1,7 +1,7 @@
 packages:
-  ponte:
+  pandoc:
     version: 1.0
     actions:
-      render:
+      convert:
         docker: eduardofcbg/openwhisk-pandoc
         web-export: true

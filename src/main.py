@@ -10,8 +10,8 @@ from app.app import pandoc
 logging.config.dictConfig(log_config)
 
 app = Sanic(name="pandoc_service")
-app.blueprint(pandoc)
 
+app.blueprint(pandoc)
 app.error_handler = OpenwhiskErrorHandler()
 
 

@@ -3,7 +3,11 @@ from sanic.exceptions import SanicException
 from sanic.response import json
 
 
-def build_response(
+def _build_response(*, status=200, body=None, headers=None):
+    return json({"statusCode": status, "body": body, "headers": headers or {},})
+
+
+def document_response(
     *,
     status,
     document=None,
@@ -13,24 +17,20 @@ def build_response(
     extention=None
 ):
     feedback = {
-        "File-Extention": extention,
-        "Render-Command": command,
+        "Pandoc-Extention": extention,
+        "Pandoc-Command": command,
     }
 
     if errors:
-        feedback["Render-Errors"] = errors
+        feedback["Pandoc-Errors"] = errors
 
-    return json(
-        {
-            "statusCode": status,
-            "body": document,
-            "headers": {"Content-Type": content_type, **feedback},
-        }
-    )
+    headers = {"Content-Type": content_type, **feedback}
+
+    return _build_response(status=status, body=document, headers=headers)
 
 
 def not_acceptable():
-    return build_response(status=406)
+    return _build_response(status=406)
 
 
 class OpenwhiskErrorHandler(ErrorHandler):
@@ -40,6 +40,5 @@ class OpenwhiskErrorHandler(ErrorHandler):
         if isinstance(exception, SanicException):
             return defaultReponse
         else:
-            return build_response(
-                status=500, document="Server error", content_type="text/plain"
-            )
+            headers = {"Content-Type": "text/plain"}
+            return _build_response(status=500, body="Server error", headers=headers)
