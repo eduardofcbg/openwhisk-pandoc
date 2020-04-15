@@ -40,10 +40,6 @@ class OpenwhiskErrorHandler(ErrorHandler):
         if isinstance(exception, SanicException):
             return defaultReponse
         else:
-            return json(
-                {
-                    "statusCode": 500,
-                    "body": "Server error",
-                    "headers": {"Content-Type": "text/plain"},
-                }
+            return build_response(
+                status=500, document="Server error", content_type="text/plain"
             )
