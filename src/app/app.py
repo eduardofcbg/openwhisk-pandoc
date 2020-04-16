@@ -44,7 +44,6 @@ async def run(request):
             content_type="text/plain",
         )
     else:
-        print("type " + content_type)
         if content_type in binary_mime_types:
             document = base64.b64encode(stdout_data)
         else:
