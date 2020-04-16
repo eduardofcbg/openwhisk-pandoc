@@ -10,10 +10,12 @@ RUN wget https://github.com/jgm/pandoc/releases/download/2.9.2.1/pandoc-2.9.2.1-
 
 RUN groupadd -r pandoc && useradd -r -g pandoc pandoc
 
-ADD src /
-
+COPY requirements.txt /
 RUN pip install -r requirements.txt
+
+COPY src/ /src
+WORKDIR /src
 
 EXPOSE 8080
 
-CMD [ "python", "/main.py" ]
+CMD [ "python", "main.py" ]
