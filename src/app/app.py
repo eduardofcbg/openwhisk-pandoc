@@ -38,8 +38,7 @@ async def run(request):
     if not stdout_data:
         return document_response(
             status=400,
-            document="Cannot convert",
-            errors=errors,
+            document="No data returned",
             command=command,
             content_type="text/plain",
         )
@@ -52,7 +51,6 @@ async def run(request):
         return document_response(
             status=207 if errors else 200,
             document=document,
-            errors=errors,
             command=command,
             content_type=content_type,
         )

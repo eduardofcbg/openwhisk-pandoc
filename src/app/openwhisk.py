@@ -6,14 +6,11 @@ def _build_response(*, status=200, body=None, headers=None):
 
 
 def document_response(
-    *, status, document=None, errors=None, command=None, content_type=None,
+    *, status, document=None, command=None, content_type=None,
 ):
     headers = {
         "Content-Type": content_type,
         "Pandoc-Command": command,
     }
-
-    if errors:
-        headers["Pandoc-Errors"] = errors.replace("\n", "")
 
     return _build_response(status=status, body=document, headers=headers)
