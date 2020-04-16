@@ -20,8 +20,8 @@ async def run(request):
 
     content_type = headers.get("accept", "text/plain")
 
-    body = payload["__ow_body"]
-    input_document = base64.b64decode(body)
+    body = payload.get("__ow_body")
+    input_document = base64.b64decode(body) if body else None
 
     pandoc_options = headers.get("pandoc-options", "-v")
     command = "pandoc " + pandoc_options
