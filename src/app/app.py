@@ -5,30 +5,25 @@ from sanic import Blueprint, response
 from sanic.log import logger
 from sanic.response import text
 
-from .openwhisk import document_response, not_acceptable
+from .mime_types import binary as binary_mime_types
+from .openwhisk import document_response
 from .process import execute
-from .mime_types import mime_extention
 
 pandoc = Blueprint("pandoc")
 
 
 @pandoc.post("/run")
 async def run(request):
-    payload = request.json
-
+    action = request.json
+    payload = action["value"]
     headers = payload["__ow_headers"]
-    accept = headers.get("Accept")
 
-    if accept not in mime_extention:
-        return not_acceptable()
-
-    content_type = accept
-    extention = mime_extention[accept]
+    content_type = headers.get("accept", "text/plain")
 
     body = payload["__ow_body"]
     input_document = base64.b64decode(body)
 
-    pandoc_options = headers.get("Pandoc-Options", "-v")
+    pandoc_options = headers.get("pandoc-options", "-v")
     command = "pandoc " + pandoc_options
 
     logger.info("Will execute: %s", command)
@@ -43,21 +38,24 @@ async def run(request):
     if not stdout_data:
         return document_response(
             status=400,
-            document=None,
+            document="Cannot convert",
             errors=errors,
             command=command,
-            content_type=content_type,
-            extention=extention,
+            content_type="text/plain",
         )
-    if stdout_data:
-        document = base64.encodebytes(stdout_data)
+    else:
+        print("type " + content_type)
+        if content_type in binary_mime_types:
+            document = base64.b64encode(stdout_data)
+        else:
+            document = stdout_data.decode("utf-8")
+
         return document_response(
             status=207 if errors else 200,
             document=document,
             errors=errors,
             command=command,
             content_type=content_type,
-            extention=extention,
         )
 
 
