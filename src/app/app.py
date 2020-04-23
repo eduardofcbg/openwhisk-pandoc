@@ -18,10 +18,14 @@ async def run(request):
     payload = action["value"]
     headers = payload["__ow_headers"]
 
-    content_type = headers.get("accept", "text/plain")
+    content_type = headers.get("content-type", "text/plain")
+    res_content_type = headers.get("accept", "text/plain")
 
     body = payload.get("__ow_body")
-    input_document = base64.b64decode(body) if body else None
+    if body and content_type in binary_mime_types:
+        input_document = base64.b64decode(body)
+    else:
+        input_document = body
 
     pandoc_options = headers.get("pandoc-options", "-v")
     command = "pandoc " + pandoc_options
@@ -43,7 +47,7 @@ async def run(request):
             content_type="text/plain",
         )
     else:
-        if content_type in binary_mime_types:
+        if res_content_type in binary_mime_types:
             document = base64.b64encode(stdout_data)
         else:
             document = stdout_data.decode("utf-8")
@@ -52,7 +56,7 @@ async def run(request):
             status=207 if errors else 200,
             document=document,
             command=command,
-            content_type=content_type,
+            content_type=res_content_type,
         )
 
 
