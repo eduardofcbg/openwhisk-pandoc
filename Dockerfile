@@ -10,6 +10,9 @@ RUN wget https://github.com/jgm/pandoc/releases/download/2.9.2.1/pandoc-2.9.2.1-
 
 RUN groupadd -r pandoc && useradd -r -g pandoc pandoc
 
+RUN mkdir /usr/local/share/fonts/macfonts && \
+    git clone https://github.com/potyt/fonts /usr/local/share/fonts/macfonts
+
 COPY requirements.txt /
 RUN pip install -r requirements.txt
 
