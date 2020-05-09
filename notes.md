@@ -21,3 +21,19 @@ Choose eu-gb region
 `ibmcloud fn deploy --manifest manifest.yaml`
 
 `ibmcloud fn api list`
+
+# try
+
+```
+curl --request POST \
+  --url $API_URL \
+  --header 'accept: application/pdf' \
+  --header 'content-type: text/plain' \
+  --header 'pandoc-options: -f markdown -t pdf ' \
+  --data '---
+title: Test
+...
+
+This is a test
+'
+```
