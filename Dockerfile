@@ -16,6 +16,8 @@ RUN mkdir /usr/local/share/fonts/macfonts && \
 COPY requirements.txt /
 RUN pip install -r requirements.txt
 
+RUN pip install pandoc-fignos pandoc-eqnos pandoc-tablenos pandoc-secnos --user
+
 COPY src/ /src
 WORKDIR /src
 
