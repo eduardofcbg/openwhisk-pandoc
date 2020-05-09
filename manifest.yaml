@@ -10,7 +10,7 @@ packages:
           memorySize: 512
     apis:
       pandoc:
-        convert:
+        pandoc:
           convert:
             convert:
               method: POST
