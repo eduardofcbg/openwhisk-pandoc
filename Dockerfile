@@ -17,6 +17,7 @@ COPY requirements.txt /
 RUN pip install -r requirements.txt
 
 RUN pip install pandoc-fignos pandoc-eqnos pandoc-tablenos pandoc-secnos --user
+RUN ln -s ~/.local/bin/pandoc-xnos /usr/local/bin/
 
 COPY src/ /src
 WORKDIR /src

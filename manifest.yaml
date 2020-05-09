@@ -3,5 +3,15 @@ packages:
     version: 1.0
     actions:
       convert:
-        docker: eduardofcbg/openwhisk-pandoc
+        docker: eduardofcbg/openwhisk-pandoc:latest
         web-export: true
+        limits:
+          timeout: 180000
+          memorySize: 512
+    apis:
+      pandoc:
+        convert:
+          convert:
+            convert:
+              method: POST
+              response: http
