@@ -1,4 +1,4 @@
-# docker
+# build
 
 `docker build -t eduardofcbg/openwhisk-pandoc:latest .`
 
